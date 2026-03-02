@@ -1,0 +1,12 @@
+﻿{
+  "name": "follow-balance",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "css:build": "tailwindcss -i ./app/static/css/src/tailwind.css -o ./app/static/css/tailwind.css --minify",
+    "css:watch": "tailwindcss -i ./app/static/css/src/tailwind.css -o ./app/static/css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

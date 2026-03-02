@@ -1,0 +1,58 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .file-input {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.75rem;
+    background: #f8fafc;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    color: #0f172a;
+  }
+
+  .file-input:hover {
+    background: #f1f5f9;
+  }
+
+  .file-input:focus {
+    outline: 2px solid #1fa97a;
+    outline-offset: 2px;
+  }
+
+  .metric-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.625rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .info-button {
+    display: inline-flex;
+    height: 1.5rem;
+    width: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid #94a3b8;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .info-button:hover {
+    background: #e2e8f0;
+  }
+
+  .instructions-panel {
+    border: 1px solid #bae6fd;
+    border-radius: 0.75rem;
+    background: #f0f9ff;
+    padding: 0.875rem;
+  }
+}
