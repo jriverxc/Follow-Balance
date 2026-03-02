@@ -1,0 +1,101 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Follow Balance{% endblock %}
+
+{% block content %}
+<section class="mb-8 rounded-2xl bg-gradient-to-r from-brand-700 via-brand-600 to-emerald-500 p-8 text-white shadow-lg">
+  <p class="mb-3 inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider">Follow Balance</p>
+  <h1 class="text-3xl font-extrabold leading-tight md:text-4xl">Encuentra rapido quien no te sigue de vuelta</h1>
+  <p class="mt-4 max-w-2xl text-sm text-emerald-50 md:text-base">Sube tus archivos <strong>followers_1.json</strong> y <strong>following.json</strong>. El sistema los compara y te muestra enseguida la lista.</p>
+</section>
+
+{% if error %}
+<section class="mb-6 rounded-xl border border-rose-300 bg-rose-50 p-4 text-sm text-rose-900">
+  <strong>Error:</strong> {{ error }}
+</section>
+{% endif %}
+
+<section class="grid gap-6 md:grid-cols-[2fr_1fr]">
+  <article class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <div class="mb-1 flex items-center gap-2">
+      <h2 class="text-xl font-bold">Cargar archivos</h2>
+      <button id="toggle-instructions" type="button" class="info-button" aria-expanded="false" aria-controls="instructions-panel" title="Ver instrucciones">i</button>
+    </div>
+
+    <p class="mb-3 text-sm text-slate-600">Sube los dos archivos JSON exportados desde tu cuenta y presiona analizar.</p>
+    <p class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">Aviso: el resultado tambien puede incluir usuarios con cuentas desactivadas.</p>
+
+    <div id="instructions-panel" class="instructions-panel mb-6 hidden">
+      <h3 class="mb-2 text-sm font-bold text-slate-900">Como exportar tus datos</h3>
+      <ol class="list-decimal space-y-1 pl-5 text-sm text-slate-700">
+        <li>Dale a <strong>Exportar los datos</strong> en tu cuenta.</li>
+        <li>Selecciona <strong>Exportar al dispositivo</strong>.</li>
+        <li>En <strong>Personalizar informacion</strong> marca: contactos, seguidores y seguidos.</li>
+        <li>En intervalo de fechas marca <strong>Desde el principio</strong>.</li>
+        <li>En formato selecciona <strong>JSON</strong>.</li>
+      </ol>
+    </div>
+
+    <form class="space-y-5" method="post" enctype="multipart/form-data" action="/">
+      <label class="block">
+        <span class="mb-2 block text-sm font-semibold text-slate-800">Archivo de seguidores</span>
+        <input class="file-input" type="file" name="followers_file" accept=".json" required />
+        <span class="mt-1 block text-xs text-slate-500">Normalmente: <code>followers_1.json</code>.</span>
+      </label>
+
+      <label class="block">
+        <span class="mb-2 block text-sm font-semibold text-slate-800">Archivo de seguidos</span>
+        <input class="file-input" type="file" name="following_file" accept=".json" required />
+        <span class="mt-1 block text-xs text-slate-500">Normalmente: <code>following.json</code>.</span>
+      </label>
+
+      <button type="submit" class="inline-flex w-full items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 md:w-auto">Analizar archivos</button>
+    </form>
+  </article>
+
+  <aside class="space-y-4">
+    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <h3 class="mb-2 font-bold text-slate-900">Resumen</h3>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li class="metric-line"><span>Sigues</span><strong>{{ result.following_count if result else '-' }}</strong></li>
+        <li class="metric-line"><span>Te siguen</span><strong>{{ result.followers_count if result else '-' }}</strong></li>
+        <li class="metric-line"><span>No te siguen</span><strong>{{ result.non_followers_count if result else '-' }}</strong></li>
+      </ul>
+    </div>
+
+    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <h3 class="mb-2 font-bold text-slate-900">Resultado</h3>
+      {% if result and result.non_followers %}
+      <ul class="max-h-64 space-y-1 overflow-auto text-sm text-slate-700">
+        {% for user in result.non_followers %}
+        <li class="rounded-md bg-slate-50 px-2 py-1"><a class="font-medium text-brand-700 hover:underline" href="https://www.instagram.com/{{ user }}/" target="_blank" rel="noopener noreferrer">@{{ user }}</a></li>
+        {% endfor %}
+      </ul>
+      <form method="post" action="/download-csv" class="mt-4">
+        {% for user in result.non_followers %}
+        <input type="hidden" name="non_followers" value="{{ user }}" />
+        {% endfor %}
+        <button type="submit" class="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-100">Descargar resultados CSV</button>
+      </form>
+      {% elif result %}
+      <p class="text-sm text-slate-600">No encontramos usuarios que no te sigan de vuelta.</p>
+      {% else %}
+      <p class="text-sm text-slate-600">Aqui veras la lista de usuarios al terminar el analisis.</p>
+      {% endif %}
+    </div>
+  </aside>
+</section>
+
+<script>
+  const toggleButton = document.getElementById("toggle-instructions");
+  const panel = document.getElementById("instructions-panel");
+
+  if (toggleButton && panel) {
+    toggleButton.addEventListener("click", () => {
+      const isHidden = panel.classList.contains("hidden");
+      panel.classList.toggle("hidden");
+      toggleButton.setAttribute("aria-expanded", String(isHidden));
+    });
+  }
+</script>
+{% endblock %}
