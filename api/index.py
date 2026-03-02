@@ -1,1 +1,3 @@
-﻿from app.main import app
+﻿"""ASGI entrypoint for Vercel."""
+
+from app.main import app
