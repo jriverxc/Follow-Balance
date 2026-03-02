@@ -1,0 +1,17 @@
+﻿{
+  "functions": {
+    "api/index.py": {
+      "runtime": "python3.12",
+      "includeFiles": [
+        "app/templates/**",
+        "app/static/**"
+      ]
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.py"
+    }
+  ]
+}

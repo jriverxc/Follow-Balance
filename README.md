@@ -29,7 +29,7 @@ Instala dependencias de frontend:
 npm install
 ```
 
-## Desarrollo
+## Desarrollo local
 Compila Tailwind en modo watch (terminal 1):
 ```bash
 npm run css:watch
@@ -49,9 +49,23 @@ npm run css:build
 ```
 Genera `app/static/css/tailwind.css` minificado.
 
+## Deploy en Vercel
+El proyecto ya incluye:
+- `api/index.py` (entrypoint ASGI)
+- `vercel.json` (rewrites e inclusion de templates/static)
+
+Pasos:
+1. Sube el proyecto a GitHub.
+2. En Vercel, crea `New Project` y conecta ese repo.
+3. Deja Framework Preset en `Other` (o automatico).
+4. No pongas Build Command ni Output Directory.
+5. Deploy.
+
 ## Estructura
 ```text
 .
+|-- api/
+|   `-- index.py
 |-- app/
 |   |-- main.py
 |   |-- routes.py
@@ -70,6 +84,7 @@ Genera `app/static/css/tailwind.css` minificado.
 |-- requirements.txt
 |-- package.json
 |-- tailwind.config.js
+|-- vercel.json
 `-- .gitignore
 ```
 
@@ -81,3 +96,4 @@ Genera `app/static/css/tailwind.css` minificado.
 ## Notas
 - El resultado puede incluir cuentas desactivadas.
 - Los archivos se procesan en memoria durante la solicitud.
+- En Vercel el backend corre en serverless, por eso puede haber cold start.
